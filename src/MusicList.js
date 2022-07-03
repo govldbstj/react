@@ -1,5 +1,6 @@
 import React from 'react';
-import {Card, CardContent, Typography} from '@mui/material';
+import {Card, CardContent, CardActions, Typography, IconButton} from '@mui/material';
+import {Favorite, FavoriteBorder} from '@mui/icons-material';
 
 const styles = {
     content : {},
@@ -26,6 +27,12 @@ export default function MusicList ({list}) {
                         <Typography variant="subtitle1"> {item.artistName}</Typography>
                         <Typography variant="subtitle2"> {item.collectionCensoredName}</Typography>
                     </CardContent>
+                    <CardActions>
+                        <IconButton>
+                            {item.like ? <Favorite /> : <FavoriteBorder />}
+                        </IconButton>
+                    </CardActions>
+
                 </Card>)
             })}
         </div>
