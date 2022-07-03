@@ -18,6 +18,14 @@ const styles = {
 };
 
 export default function MusicList ({list}) {
+    const [likes, setLikes] = React.useState({});
+
+    const toggleFavorite = (id) => () => {
+        // React Hooks useState() with Object
+        // https://stackoverflow.com/questions/54150783/react-hooks-usestate-with-object
+        setLikes({...likes, [id] : !likes[id]}); 
+    }
+
     return (
         <div>
             {list.results.map(item => {
@@ -28,8 +36,9 @@ export default function MusicList ({list}) {
                         <Typography variant="subtitle2"> {item.collectionCensoredName}</Typography>
                     </CardContent>
                     <CardActions>
-                        <IconButton>
-                            {item.like ? <Favorite /> : <FavoriteBorder />}
+                        <IconButton  onClick={toggleFavorite(item.collectionId)}>
+                            {(likes[item.collectionId] === true) ? 
+                                <Favorite /> : <FavoriteBorder /> }
                         </IconButton>
                     </CardActions>
 
