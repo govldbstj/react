@@ -1,6 +1,7 @@
 import React from 'react';
 import {Card, CardContent, CardActions, Typography, IconButton} from '@mui/material';
 import {Favorite, FavoriteBorder} from '@mui/icons-material';
+import SnackMsg from './SnackMsg';
 
 const styles = {
     content : {},
@@ -19,12 +20,27 @@ const styles = {
 
 export default function MusicList ({list}) {
     const [likes, setLikes] = React.useState({});
+    const [snackState, setSnackState] = React.useState({open : false, msg : ''})
 
     const toggleFavorite = (id) => () => {
         // React Hooks useState() with Object
         // https://stackoverflow.com/questions/54150783/react-hooks-usestate-with-object
+
+        // state variables are read-only. You cannot update state variables directly.
+        
         setLikes({...likes, [id] : !likes[id]}); 
+
+        //snackState = { open : true, msg : `${id} is clicked`}
+        setSnackState({...snackState, open : true, msg : `${id} is clicked` })
     }
+
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+          }
+      
+          setSnackState({open : false, msg : ''});
+    }       
 
     return (
         <div>
@@ -44,6 +60,8 @@ export default function MusicList ({list}) {
 
                 </Card>)
             })}
+            <SnackMsg open = {snackState.open} message={snackState.msg} 
+                onClose={handleSnackbarClose}/>
         </div>
     );
 }
