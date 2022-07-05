@@ -1,7 +1,6 @@
 import React from 'react';
 import {Typography, AppBar, CssBaseline} from '@mui/material';
-import MusicList from './MusicList';
-import music_list from './data';
+import SearchPage from './SearchPage';
 
 export default function App () {
     return (
@@ -13,8 +12,7 @@ export default function App () {
             </AppBar>
 
             <div style={{height: 60, width: '100%'}}></div>
-            <MusicList list={music_list}>
-            </MusicList>
+            <SearchPage/>
 
         </React.Fragment>
     )
