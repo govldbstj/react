@@ -2,9 +2,8 @@ import React from 'react';
 import {Button, TextField} from '@mui/material';
 import MusicList from './MusicList';
 
-export default function SearchPage () {
+export default function SearchPage ({list, onSearch}) {
     const [searchWord, setSearchWord] = React.useState('');
-    const [music_list, setMusicList] = React.useState([]);
     
     const handleSearch = (event) => {
         event.preventDefault();
@@ -13,7 +12,7 @@ export default function SearchPage () {
         fetch(`http://itunes.apple.com/search?term=${searchWord}&entity=album`)
         .then(r => r.json()).then(r => {
             console.log(r);
-            setMusicList(r.results);
+            onSearch(r.results);
             setSearchWord('');
         }).catch(e => console.log('error when search musician'));
     }
@@ -38,7 +37,7 @@ export default function SearchPage () {
                 </div>
             </form>
 
-            <MusicList list={music_list}>
+            <MusicList list={list}>
             </MusicList>
         </React.Fragment>
     )

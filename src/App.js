@@ -4,6 +4,8 @@ import SearchPage from './SearchPage';
 
 export default function App () {
     const [currentTab, setCurrentTab] = React.useState(0);
+    const [searchResult, setSearchResult] = React.useState([]);
+
 
     const handleTabChange = (event, newValue) => {
         setCurrentTab(newValue);
@@ -26,7 +28,7 @@ export default function App () {
                 </Tabs>
             </Box>
 
-            { currentTab == 0 && <SearchPage/> }
+            { currentTab == 0 && <SearchPage list={searchResult} onSearch={setSearchResult}/> }
             { currentTab == 1 &&  
                 <Typography align="center" variant="h2" > Item Two </Typography>}
             { currentTab == 2 &&  
