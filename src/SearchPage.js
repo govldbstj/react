@@ -9,7 +9,7 @@ export default function SearchPage ({list, onSearch}) {
         event.preventDefault();
         console.log(searchWord);
         setSearchWord('');
-        fetch(`http://itunes.apple.com/search?term=${searchWord}&entity=album`)
+        fetch(`/musicSearch`)
         .then(r => r.json()).then(r => {
             console.log(r);
             onSearch(r.results);
