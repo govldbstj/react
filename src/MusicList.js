@@ -22,7 +22,7 @@ export default function MusicList ({list}) {
     const [likes, setLikes] = React.useState({});
     const [snackState, setSnackState] = React.useState({open : false, msg : ''})
 
-    const toggleFavorite = (id, name) => () => {
+    const toggleFavorite = (id, name, r, cnt) => () => {
         // React Hooks useState() with Object
         // https://stackoverflow.com/questions/54150783/react-hooks-usestate-with-object
 
@@ -32,6 +32,26 @@ export default function MusicList ({list}) {
 
         //snackState = { open : true, msg : `${id} is clicked`}
         setSnackState({...snackState, open : true, msg : `${name} is clicked` })
+
+        fetch("likes", {
+            method : "POST",
+            headers:{
+                'Content-Type' : 'application/json',
+            },
+            body: JSON.stringify(r)
+        })
+        .then(r => r.json()).then(cnt = 1).then(console.log(cnt));
+
+        if(cnt == 1){
+        fetch(`likes/${id}`, {
+            method : "DELETE",
+            headers:{
+                'Content-Type' : 'application/json',
+            },
+            body: JSON.stringify(r)
+        })
+        .then(r => r.json()).then(cnt = 0).then(console.log(cnt));
+        }
     }
 
     const handleSnackbarClose = (event, reason) => {
@@ -52,7 +72,7 @@ export default function MusicList ({list}) {
                         <Typography variant="subtitle2"> {item.collectionCensoredName}</Typography>
                     </CardContent>
                     <CardActions>
-                        <IconButton  onClick={toggleFavorite(item.collectionId, item.collectionName)}>
+                        <IconButton  onClick={toggleFavorite(item.collectionId, item.collectionName, item, item.count)}>
                             {(likes[item.collectionId] === true) ? 
                                 <Favorite /> : <FavoriteBorder /> }
                         </IconButton>

@@ -4,21 +4,18 @@ import MusicList from './MusicList';
 
 export default function SearchPage ({list, onSearch}) {
     const [searchWord, setSearchWord] = React.useState('');
-    
+
     const handleSearch = (event) => {
         event.preventDefault();
         setSearchWord('');
         fetch(`/musicSearch/${searchWord}`,{
-            method : "GET",
-            /*headers : {
-                'Content-type' : 'text/javascript'
-            }*/
+            method : "GET"
         })
-        .then(response => response.json())
         .then(r => r.json()).then(r => {
             console.log(r);
-            console.log(onSearch(r.results));
+            onSearch(r.results);
             setSearchWord('');
+            r.count = 0;
         }).catch(e => console.log('error when search musician'));
     }
     
