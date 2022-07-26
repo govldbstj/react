@@ -22,37 +22,37 @@ export default function MusicList ({list}) {
     const [likes, setLikes] = React.useState({});
     const [snackState, setSnackState] = React.useState({open : false, msg : ''})
 
-    const toggleFavorite = (id, name, r, cnt) => () => {
+    const toggleFavorite = (id, name, r) => () => {
         // React Hooks useState() with Object
         // https://stackoverflow.com/questions/54150783/react-hooks-usestate-with-object
 
         // state variables are read-only. You cannot update state variables directly.
 
         setLikes({...likes, [id] : !likes[id]}); 
+        console.log(likes[id]);
 
         //snackState = { open : true, msg : `${id} is clicked`}
         setSnackState({...snackState, open : true, msg : `${name} is clicked` })
 
-        fetch("likes", {
-            method : "POST",
-            headers:{
-                'Content-Type' : 'application/json',
-            },
-            body: JSON.stringify(r)
-        })
-        .then(r => r.json()).then(cnt = 1).then(console.log(cnt));
-
-        if(cnt == 1){
-        fetch(`likes/${id}`, {
-            method : "DELETE",
-            headers:{
-                'Content-Type' : 'application/json',
-            },
-            body: JSON.stringify(r)
-        })
-        .then(r => r.json()).then(cnt = 0).then(console.log(cnt));
+        if(likes[id] != true){
+            fetch("likes", {
+                method : "POST",
+                headers:{
+                    'Content-Type' : 'application/json',
+                },
+                body: JSON.stringify(r)
+            }).then(r => r.json());
         }
-    }
+        else if(likes[id] == true){
+            fetch(`/likes/${id}`, {
+                method : "DELETE",
+                headers:{
+                    'Content-Type' : 'application/json',
+                },
+                body: JSON.stringify(r)
+            }).then(r => r.json);
+        }
+        }
 
     const handleSnackbarClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -65,6 +65,7 @@ export default function MusicList ({list}) {
     return (
         <div>
             {list.map(item => {
+                item.count = 0;
                 return (
                 <Card sx={styles.card} key={item.collectionId}>
                     <CardContent>
@@ -72,8 +73,8 @@ export default function MusicList ({list}) {
                         <Typography variant="subtitle2"> {item.collectionCensoredName}</Typography>
                     </CardContent>
                     <CardActions>
-                        <IconButton  onClick={toggleFavorite(item.collectionId, item.collectionName, item, item.count)}>
-                            {(likes[item.collectionId] === true) ? 
+                        <IconButton  onClick={toggleFavorite(item.collectionId, item.collectionName, item)}>
+                            {(likes[item.collectionId] == true) ? 
                                 <Favorite /> : <FavoriteBorder /> }
                         </IconButton>
                     </CardActions>
